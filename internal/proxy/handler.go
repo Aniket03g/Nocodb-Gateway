@@ -94,7 +94,11 @@ func (p *ProxyHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Construct the target URL
-	targetURL := p.NocoDBURL + resolvedPath
+	targetURL := p.NocoDBURL
+	if !strings.HasSuffix(targetURL, "/") {
+		targetURL += "/"
+	}
+	targetURL += p.ResolvedConfig.BaseID + "/" + resolvedPath
 	if r.URL.RawQuery != "" {
 		targetURL += "?" + r.URL.RawQuery
 	}
